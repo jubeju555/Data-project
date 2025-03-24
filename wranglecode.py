@@ -12,7 +12,7 @@ datafeed['ID'] = pd.to_numeric(datafeed['ID'], errors='coerce')
 datafeed['Income'] = datafeed['Income'].apply(lambda x: str(x).replace('$', '').replace(',', '').strip())
 datafeed['Income'] = pd.to_numeric(datafeed['Income'], errors='coerce')
 # group income by education and marital status and fill by mean
-# datafeed['Income'] = datafeed.groupby(['Education', 'Marital_Status'])['Income'].transform(lambda x: x.fillna(x.mean()))
+datafeed['Income'] = datafeed.groupby(['Education', 'Marital_Status'])['Income'].transform(lambda x: x.fillna(x.mean()))
 
 # get rid of empty spaces
 
