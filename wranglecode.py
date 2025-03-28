@@ -19,6 +19,13 @@ datafeed['Income'] = datafeed.groupby(['Education', 'Marital_Status'])['Income']
 datafeed['Education'] = datafeed['Education'].str.strip()
 datafeed['Marital_Status'] = datafeed['Marital_Status'].str.strip()
 
+datafeed['Dt_Customer'] = pd.to_datetime(datafeed['Dt_Customer'], errors='coerce')
+datafeed['TotalChildren'] = datafeed['Kidhome'] + datafeed['Teenhome']
+datafeed['age'] = 2025 - datafeed['Year_Birth']
+datafeed['Total_Spending'] = datafeed[['MntWines', 'MntFruits', 'MntMeatProducts', 'MntFishProducts', 'MntSweetProducts', 'MntGoldProds']].sum(axis=1)
+datafeed['Total_purchases'] = datafeed[['NumDealsPurchases', 'NumWebPurchases', 'NumCatalogPurchases', 'NumStorePurchases']].sum(axis=1)
+
+
 # print section to check 
 print(datafeed.head())
 # print(datafeed.columns)
