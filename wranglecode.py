@@ -23,7 +23,9 @@ datafeed['Marital_Status'] = datafeed['Marital_Status'].str.strip()
 
 datafeed['Dt_Customer'] = pd.to_datetime(datafeed['Dt_Customer'], errors='coerce')
 datafeed['TotalChildren'] = datafeed['Kidhome'] + datafeed['Teenhome']
+
 datafeed['age'] = 2025 - datafeed['Year_Birth']
+
 datafeed['Total_Spending'] = datafeed[['MntWines', 'MntFruits', 'MntMeatProducts', 'MntFishProducts', 'MntSweetProducts', 'MntGoldProds']].sum(axis=1)
 datafeed['Total_purchases'] = datafeed[['NumDealsPurchases', 'NumWebPurchases', 'NumCatalogPurchases', 'NumStorePurchases']].sum(axis=1)
 
@@ -47,34 +49,59 @@ print(datafeed.groupby('shoppertype')['TotalChildren'].mean())
 # Count of each type
 print(datafeed['shoppertype'].value_counts())
 
+# Count plot of shopping types
+sns.countplot(data=datafeed, x='ShopType')
+plt.title("Distribution of Shopping Preferences")
+plt.show()
+
+# Age vs shopping type
+sns.boxplot(data=datafeed, x='ShopType', y='age')
+plt.title("Age Distribution by Shopping Preference")
+plt.show()
+
+productcols = ['MntWines', 'MntFruits', 'MntMeatProducts', 'MntFishProducts', 'MntSweetProducts', 'MntGoldProds']
+producttotal = datafeed[productcols].sum().sort_values(ascending=False)
+
+#bar chart
+producttotal.plot(kind='bar', title= 'product catagory revenue', ylabel='Total Revenue', xlabel='Product Category')
+plt.show()
+
+
+sns.boxplot(data=datafeed, x='response', y='age')
+plt.title("Age Distribution by Response")
+plt.xticks([0, 1], ['No Response', 'Response'])
+plt.show()
+
+sns.boxplot(data=datafeed, x='TotalChildren', y='Total_Spending')
+plt.title("Total Spending by Total Children")
+plt.show()
 
 # graphs and plots
 
-# numericcols = ['Income', 'age', 'Recency', 'TotalChildren', 'Total_Spending', 'Total_purchases']
+numericcols = ['Income', 'age', 'Recency', 'TotalChildren', 'Total_Spending', 'Total_purchases']
 
-# for col in numericcols:
-#     plt.figure(figsize=(8,4))
-#     sns.histplot(datafeed[col], kde=True, bins=30)
-#     plt.title(f'Distribution of {col}')
-#     plt.xlabel(col)
-#     plt.ylabel('Frequency')
-#     plt.grid(True)
-#     plt.show()
+for col in numericcols:
+    plt.figure(figsize=(8,4))
+    sns.histplot(datafeed[col], kde=True, bins=30)
+    plt.title(f'Distribution of {col}')
+    plt.xlabel(col)
+    plt.ylabel('Frequency')
+    plt.grid(True)
+    plt.show()
 
-# for col in numericcols:
-#     plt.figure(figsize=(8, 4))
-#     sns.boxplot(x=datafeed[col])
-#     plt.title(f'Box Plot of {col}')
-#     plt.grid(True)
-#     plt.show()
+for col in numericcols:
+    plt.figure(figsize=(8, 4))
+    sns.boxplot(x=datafeed[col])
+    plt.title(f'Box Plot of {col}')
+    plt.grid(True)
+    plt.show()
 
 
 
-# print section to check 
+# print section to check/ debug data
 print(datafeed)
 # print(datafeed.columns)
 # print(datafeed.shape)
-# print(datafeed.isnull().sum())
 print(datafeed.info())
 # print(datafeed.describe())
 
