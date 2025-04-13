@@ -1,5 +1,7 @@
 # import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 # import os
 
 data_path = "marketing_data.csv"
@@ -25,13 +27,56 @@ datafeed['age'] = 2025 - datafeed['Year_Birth']
 datafeed['Total_Spending'] = datafeed[['MntWines', 'MntFruits', 'MntMeatProducts', 'MntFishProducts', 'MntSweetProducts', 'MntGoldProds']].sum(axis=1)
 datafeed['Total_purchases'] = datafeed[['NumDealsPurchases', 'NumWebPurchases', 'NumCatalogPurchases', 'NumStorePurchases']].sum(axis=1)
 
+datafeed['onlineactivity'] = datafeed['NumWebPurchases'] + datafeed['NumCatalogPurchases'] + datafeed['NumWebVisitsMonth']
+datafeed['instoreactivity'] = datafeed['NumStorePurchases']
+
+def shoppingpref(row):
+    if row['onlineactivity'] > row['instoreactivity']:
+     return 'online shopper'
+    elif row ['onlineactivity'] < row['instoreactivity']:
+       return 'instore shopper'
+    else: 
+       return 'mixed shopper'
+    
+datafeed['shoppertype'] = datafeed.apply(shoppingpref, axis=1)
+
+# Age vs shopping type
+print(datafeed.groupby('shoppertype')['age'].mean())
+# Children vs shopping type
+print(datafeed.groupby('shoppertype')['TotalChildren'].mean())
+# Count of each type
+print(datafeed['shoppertype'].value_counts())
+
+
+# graphs and plots
+
+# numericcols = ['Income', 'age', 'Recency', 'TotalChildren', 'Total_Spending', 'Total_purchases']
+
+# for col in numericcols:
+#     plt.figure(figsize=(8,4))
+#     sns.histplot(datafeed[col], kde=True, bins=30)
+#     plt.title(f'Distribution of {col}')
+#     plt.xlabel(col)
+#     plt.ylabel('Frequency')
+#     plt.grid(True)
+#     plt.show()
+
+# for col in numericcols:
+#     plt.figure(figsize=(8, 4))
+#     sns.boxplot(x=datafeed[col])
+#     plt.title(f'Box Plot of {col}')
+#     plt.grid(True)
+#     plt.show()
+
+
 
 # print section to check 
-print(datafeed.head())
+print(datafeed)
 # print(datafeed.columns)
-print(datafeed.shape)
+# print(datafeed.shape)
 # print(datafeed.isnull().sum())
 print(datafeed.info())
-print(datafeed.describe())
+# print(datafeed.describe())
 
+# print(datafeed.isnull().sum())
 
